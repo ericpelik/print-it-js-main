@@ -17,51 +17,88 @@ const slides = [
 	}
 ]
 
-/** Création de defilement infini du carrousel */
 
 const bannerImage = document.querySelector(".banner-img");
 
 let tagLine = document.querySelector("#banner p")
 
-let compteur=0;
+let compteur = 0;
 
-/** ajout des eventListeners */
-/** Flèche droite  - Avec modifications au clic */
+/** Creating bullet points */
 
-let next=document.querySelector(".arrow_right")
-console.log(next);
+const dots = document.querySelector(".dots")
+for (let i = 0; i < slides.length; i++) {
+    let dot = document.createElement("div");
+    dot.className = "dot";
+    dots.appendChild(dot)
+}
+
+/** Creating active bullet point */
+
+let allDot = document.querySelectorAll(".dot")
+allDot[0].classList.add("dot_selected");
+
+function removeDotSelected() {
+
+    let bullet = document.getElementsByClassName("dot_selected");
+
+    for (let i = 0; i < allDot.length; i++) {
+        allDot[i].classList.remove("dot_selected");
+    }
+}
+
+/** Added JavaScript click scrolling for bullet points */
+
+for (let i = 0; i < allDot.length; i++) {
+allDot[i].addEventListener("click", () => {
+        compteur = i;
+        bannerImage.src = "./assets/images/slideshow/" + slides[compteur].image;
+        tagLine.innerHTML = slides[compteur].tagLine;
+        removeDotSelected();
+        allDot[compteur].classList.add("dot_selected");
+    })
+}
+
+/** Creating the right arrow */
+
+let next = document.querySelector(".arrow_right")
 
 next.addEventListener("click", () => {
     compteur++
-    if (compteur>=slides.length){
-        compteur=0
-    }  
-    bannerImage.src="./assets/images/slideshow/"+slides[compteur].image;
+    if (compteur >= slides.length) {
+        compteur = 0
+    }
+    bannerImage.src = "./assets/images/slideshow/" + slides[compteur].image;
     tagLine.innerHTML = slides[compteur].tagLine;
-    console.log(compteur)
+    removeDotSelected();
+    allDot[compteur].classList.add("dot_selected");
 })
 
-/** Flèche gauche  - Avec modifications au clic */
+/** Creating the left arrow */
 
-let prev=document.querySelector(".arrow_left")
-console.log(next);
+let prev = document.querySelector(".arrow_left")
 
 prev.addEventListener("click", () => {
     compteur--
-    if (compteur<0){
-        compteur=slides.length-1
-    }  
-    bannerImage.src="./assets/images/slideshow/"+slides[compteur].image;
+    if (compteur < 0) {
+        compteur = slides.length - 1
+    }
+    bannerImage.src = "./assets/images/slideshow/" + slides[compteur].image;
     tagLine.innerHTML = slides[compteur].tagLine;
-    console.log(compteur)
+    removeDotSelected();
+    allDot[compteur].classList.add("dot_selected");
 })
 
-/** Création des bullet points */
+/** creating the carousel scroll interval */
 
-const dots = document.querySelector(".dots")
-for (let i=0; i<slides.length; i++){
-    let dot=document.createElement("div");
-    dot.className="dot";
-    dots.appendChild(dot)
-	console.log(dots)
-}
+setInterval(()=>{
+    compteur++
+    if (compteur >= slides.length) {
+        compteur = 0
+    }
+    bannerImage.src = "./assets/images/slideshow/" + slides[compteur].image;
+    tagLine.innerHTML = slides[compteur].tagLine;
+    removeDotSelected();
+    allDot[compteur].classList.add("dot_selected");
+},4000)
+
